@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang='uk'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Тест по грі Dota 2</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+        .home-content h1 {
+            color: white;
+        }
+        .home-content p {  
+            color: white;
+        }
+        .home {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .home-content {
+            max-width: 600px;
+            text-align: center;
+        }
+        .home-content h1 {
+            font-size: 78px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 0, 0, .3);
+        }
+        button {
+            text-align: center;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 500;
+            color: #ffffff80;
+            text-shadow: none;
+            background: transparent;
+            cursor: pointer;
+            box-shadow: transparent;
+            border: 1px solid #ffffff80;
+            transition: 0.5s ease;
+            user-select: none;
+        }
+        #btn:hover,
+        :focus {
+            color: #ffffff;
+            background: #008cff;
+            border: 1px solid #008cff;
+            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+            box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+                        0 0 100px #008cff;
+        }
+        .question {
+            margin: 20px 0;
+            font-size: 24px;
+        }
+        .answer {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <section class="home">
+        <div class="home-content">
+            <h1>Тест по грі Dota 2</h1>
+            <p>Пройди цей тест та стань справжнім гравцем Dota 2!</p>
+            <div id="quiz-container"></div>
+            <button id="btn">Почати тест</button>
+        </div>
+    </section>
+
+    <script>
+        const questions = [
+            {
+                question: "Скільки гроїв у Dota 2?",
+                answers: ["125", "0", "1", "1488"],
+                correct: 0
+            },
+            {
+                question: "як розшифровуэтся абревіатура DOTA",
+                answers: ["якось короче забув", "dota of the acients", "Doka2"],
+                correct: 1
+            },
+            {
+                question: "Який персонаж самий сильний",
+                answers: ["Тінкер", "вайпер", "петух", "криса рики"],
+                correct: 2
+            },
+            {
+                question: "Скільки літрів пива ви випиваєте за день",
+                answers: ["1,5л.", "500мл", "100мл"],
+                correct: 0
+            },
+            {
+                question: "Хто є розробником гри Dota 2?",
+                answers: ["якийсь чел", "ну той тіп такий він 4-х глазий", "Valve"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.getElementById("btn").addEventListener("click", function() {
+            if (currentQuestionIndex === 0) {
+                
+                document.getElementById("btn").textContent = "Наступне питання";
+            }
+
+          
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion(currentQuestionIndex);
+            } else {
+                showResults();
+            }
+        });
+
+        function displayQuestion(index) {
+            const quizContainer = document.getElementById("quiz-container");
+            const questionObj = questions[index];
+
+            
+            quizContainer.innerHTML = `
+                <div class="question">${questionObj.question}</div>
+                ${questionObj.answers.map((answer, i) => `
+                    <div class="answer">
+                        <input type="radio" name="answer" value="${i}" id="answer-${i}">
+                        <label for="answer-${i}">${answer}</label>
+                    </div>
+                `).join('')}
+            `;
+
+            
+            const radios = document.querySelectorAll('input[name="answer"]');
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    checkAnswer(parseInt(this.value));
+                });
+            });
+        }
+
+        function checkAnswer(selected) {
+            const correctAnswer = questions[currentQuestionIndex].correct;
+
+            if (selected === correctAnswer) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+
+            
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion(currentQuestionIndex);
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const quizContainer = document.getElementById("quiz-container");
+            quizContainer.innerHTML = `
+                <h2>Тест завершено!</h2>
+                <p>Ваш результат: ${score} з ${questions.length}</p>
+            `;
+            document.getElementById("btn").style.display = "none";
+        }
+    </script>
+</body>
+</html>
